@@ -63,9 +63,9 @@ class TemplateManager
          * USER
          * [user:*]
          */
-        $user  = (isset($data['user'])  and ($data['user']  instanceof User))  ? $data['user']  : $APPLICATION_CONTEXT->getCurrentUser();
+        $user  = (isset($data['user']) and ($data['user'] instanceof User)) ? $data['user']  : $APPLICATION_CONTEXT->getCurrentUser();
         if($user) {
-            (strpos($text, '[user:first_name]') !== false) and $text = str_replace('[user:first_name]'       , ucfirst(mb_strtolower($user->firstname)), $text);
+            (strpos($text, '[user:first_name]') !== false) and $text = str_replace('[user:first_name]', ucfirst(mb_strtolower($user->firstname)), $text);
         }
 
         return $text;
