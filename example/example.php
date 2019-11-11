@@ -14,6 +14,10 @@ require_once __DIR__ . '/../src/Repository/DestinationRepository.php';
 require_once __DIR__ . '/../src/Repository/QuoteRepository.php';
 require_once __DIR__ . '/../src/Repository/SiteRepository.php';
 require_once __DIR__ . '/../src/TemplateManager.php';
+require_once __DIR__ . '/../src/Helper/TemplateDataHelper.php';
+
+
+$APPLICATION_CONTEXT = ApplicationContext::getInstance();
 
 $faker = \Faker\Factory::create();
 
@@ -34,9 +38,9 @@ $templateManager = new TemplateManager();
 
 $message = $templateManager->getTemplateComputed(
     $template,
-    [
-        'quote' => new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date())
-    ]
+    \Helper\TemplateDataHelper::getTemplateData($template, $faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $APPLICATION_CONTEXT->getCurrentUser())
 );
 
 echo $message->subject . "\n" . $message->content;
+
+

@@ -12,6 +12,7 @@ require_once __DIR__ . '/../src/Repository/DestinationRepository.php';
 require_once __DIR__ . '/../src/Repository/QuoteRepository.php';
 require_once __DIR__ . '/../src/Repository/SiteRepository.php';
 require_once __DIR__ . '/../src/TemplateManager.php';
+require_once __DIR__ . '/../src/Helper/TemplateDataHelper.php';
 
 class TemplateManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -34,12 +35,14 @@ class TemplateManagerTest extends PHPUnit_Framework_TestCase
      */
     public function test()
     {
+        $APPLICATION_CONTEXT = ApplicationContext::getInstance();
+
         $faker = \Faker\Factory::create();
 
         $expectedDestination = DestinationRepository::getInstance()->getById($faker->randomNumber());
         $expectedUser = ApplicationContext::getInstance()->getCurrentUser();
 
-        $quote = new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date());
+        //$quote = new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date());
 
         $template = new Template(
             1,
@@ -58,9 +61,7 @@ www.evaneos.com
 
         $message = $templateManager->getTemplateComputed(
             $template,
-            [
-                'quote' => $quote
-            ]
+            \Helper\TemplateDataHelper::getTemplateData($template, $faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $APPLICATION_CONTEXT->getCurrentUser())
         );
 
         $this->assertEquals('Votre voyage avec une agence locale ' . $expectedDestination->countryName, $message->subject);
